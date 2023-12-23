@@ -1,0 +1,4 @@
+repository "TKD@Deontron@cloud"
+  path "/"
+    br "/main"
+    co "/main"
