@@ -4,32 +4,26 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public float speed;
+    public Joystick joystick;
+
+    private Vector2 direction;
+    private Rigidbody2D rb;
+
     void Start()
     {
-        StartCoroutine(ControlLoop());
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    IEnumerator ControlLoop()
+    void FixedUpdate()
     {
-        while (true)
-        {
-            GetTouch();
-            yield return new WaitForSeconds(0.01f);
-        }
-    }
+        direction = Vector2.up * joystick.Vertical + Vector2.right * joystick.Horizontal;
+        rb.velocity = direction * speed;
 
-    private void GetTouch()
-    {
-        Vector2 pos;
-        if (Input.touchCount > 0)
-        {
-            Touch input = Input.GetTouch(0);
+        float rotateZ = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-            if (input.phase == TouchPhase.Moved)
-            {
-                pos = Camera.main.ScreenToWorldPoint(input.position);
-                transform.position = pos;
-            }
-        }
+        transform.rotation = Quaternion.Euler(0, 0, rotateZ);
+
     }
 }
